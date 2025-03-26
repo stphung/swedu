@@ -249,27 +249,24 @@ function calculateAverage(items) {
 function processUserData(user) {
   const processedData = {
     personalInfo: {
-      fullName: `${user.firstName} ${user.lastName}`,
+      fullName: \`\${user.firstName} \${user.lastName}\`,
       age: calculateAge(user.dateOfBirth),
       address: formatAddress(user.address)
     },
     preferences: {
       theme: user.theme || 'default',
-      notifications: user.notifications || true
+      notifications: user.notifications || false
     }
   };
-  
   return processedData;
 }
 
-// Good: Simple and straightforward
+// Good: Simple solution
 function processUserData(user) {
   return {
-    name: `${user.firstName} ${user.lastName}`,
-    age: calculateAge(user.dateOfBirth),
-    address: user.address,
-    theme: user.theme || 'default',
-    notifications: user.notifications ?? true
+    name: \`\${user.firstName} \${user.lastName}\`,
+    age: user.age,
+    address: user.address
   };
 }`}
           description="Example of applying KISS principle"
