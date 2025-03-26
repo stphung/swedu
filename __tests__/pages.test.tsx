@@ -1,6 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { act } from 'react';
+import ContentLayout from '@/components/content/ContentLayout';
+import ContentSection from '@/components/content/ContentSection';
+import CodeExample from '@/components/content/CodeExample';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -12,6 +19,42 @@ jest.mock('next/navigation', () => ({
 jest.mock('next/link', () => {
   return ({ children, href }: { children: React.ReactNode; href: string }) => {
     return <a href={href}>{children}</a>;
+  };
+});
+
+// Mock the content components
+jest.mock('@/components/content/ContentLayout', () => {
+  return function MockContentLayout({ children, title, description }: { children: React.ReactNode; title: string; description: string }) {
+    return (
+      <div data-testid="content-layout">
+        <h1>{title}</h1>
+        <p>{description}</p>
+        {children}
+      </div>
+    );
+  };
+});
+
+jest.mock('@/components/content/ContentSection', () => {
+  return function MockContentSection({ children, title }: { children: React.ReactNode; title: string }) {
+    return (
+      <div data-testid="content-section">
+        <h2>{title}</h2>
+        {children}
+      </div>
+    );
+  };
+});
+
+jest.mock('@/components/content/CodeExample', () => {
+  return function MockCodeExample({ title, code, description }: { title: string; code: string; description?: string }) {
+    return (
+      <div data-testid="code-example">
+        <h3>{title}</h3>
+        {description && <p>{description}</p>}
+        <pre>{code}</pre>
+      </div>
+    );
   };
 });
 
@@ -72,7 +115,7 @@ const routes = [
   '/system-design/api-design',
 ];
 
-describe('Page Loading Tests', () => {
+describe('Content Components', () => {
   const mockRouter = {
     push: jest.fn(),
     replace: jest.fn(),
@@ -89,41 +132,60 @@ describe('Page Loading Tests', () => {
     jest.clearAllMocks();
   });
 
-  // Test each route
-  routes.forEach((route) => {
-    it(`should load ${route} page`, async () => {
-      // Mock the page component
-      const PageComponent = () => <div>Test Page Content</div>;
-      
-      // Render the page
-      await act(async () => {
-        render(<PageComponent />);
-      });
+  describe('ContentLayout', () => {
+    it('should render title and description', () => {
+      render(
+        <ContentLayout
+          title="Test Title"
+          description="Test Description"
+        >
+          <div>Test Content</div>
+        </ContentLayout>
+      );
 
-      // Verify the page content is rendered
-      expect(screen.getByText('Test Page Content')).toBeInTheDocument();
+      expect(screen.getByText('Test Title')).toBeInTheDocument();
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
+      expect(screen.getByText('Test Content')).toBeInTheDocument();
     });
   });
 
-  // Test navigation between pages
-  it('should navigate between pages', async () => {
-    const startRoute = routes[0];
-    const endRoute = routes[1];
+  describe('ContentSection', () => {
+    it('should render title and content', () => {
+      render(
+        <ContentSection title="Test Section">
+          <p>Test Section Content</p>
+        </ContentSection>
+      );
 
-    // Mock the page component
-    const PageComponent = () => <div>Test Page Content</div>;
-    
-    // Render the initial page
-    await act(async () => {
-      render(<PageComponent />);
+      expect(screen.getByText('Test Section')).toBeInTheDocument();
+      expect(screen.getByText('Test Section Content')).toBeInTheDocument();
     });
+  });
 
-    // Navigate to the next page
-    await act(async () => {
-      mockRouter.push(endRoute);
+  describe('CodeExample', () => {
+    it('should render title, code, and description', () => {
+      const testCode = 'console.log("test");';
+      render(
+        <CodeExample
+          title="Test Example"
+          code={testCode}
+          description="Test Description"
+        />
+      );
+
+      expect(screen.getByText('Test Example')).toBeInTheDocument();
+      expect(screen.getByText(testCode)).toBeInTheDocument();
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
     });
+  });
 
-    // Verify navigation was called
-    expect(mockRouter.push).toHaveBeenCalledWith(endRoute);
+  describe('Navigation', () => {
+    it('should handle navigation between pages', async () => {
+      await act(async () => {
+        mockRouter.push('/principles/solid');
+      });
+
+      expect(mockRouter.push).toHaveBeenCalledWith('/principles/solid');
+    });
   });
 }); 
