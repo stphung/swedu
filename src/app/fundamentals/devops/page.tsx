@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import ContentLayout from '@/components/content/ContentLayout';
 import ContentSection from '@/components/content/ContentSection';
 import CodeExample from '@/components/content/CodeExample';
@@ -21,28 +24,7 @@ export default function DevOpsPage() {
         </p>
         <CodeExample
           title="Git Flow Example"
-          code={`# Create a new feature branch
-git checkout -b feature/new-feature
-
-# Make changes and commit
-git add .
-git commit -m "Add new feature"
-
-# Push to remote
-git push origin feature/new-feature
-
-# Create pull request
-# After review, merge to develop
-git checkout develop
-git merge feature/new-feature
-
-# Create release branch
-git checkout -b release/v1.0.0
-
-# Merge to main and tag
-git checkout main
-git merge release/v1.0.0
-git tag -a v1.0.0 -m "Release v1.0.0"`}
+          code={'# Create a new feature branch\ngit checkout -b feature/new-feature\n\n# Make changes and commit\ngit add .\ngit commit -m "Add new feature"\n\n# Push to remote\ngit push origin feature/new-feature\n\n# Create pull request\n# After review, merge to develop\ngit checkout develop\ngit merge feature/new-feature\n\n# Create release branch\ngit checkout -b release/v1.0.0\n\n# Merge to main and tag\ngit checkout main\ngit merge release/v1.0.0\ngit tag -a v1.0.0 -m "Release v1.0.0"'}
           description="Example of Git Flow workflow"
         />
 
@@ -52,91 +34,20 @@ git tag -a v1.0.0 -m "Release v1.0.0"`}
         </p>
         <CodeExample
           title="GitHub Actions Workflow"
-          code={`name: CI/CD Pipeline
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run tests
-        run: npm test
-      
-      - name: Run linting
-        run: npm run lint
-
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      
-      - name: Build application
-        run: npm run build
-      
-      - name: Build Docker image
-        run: docker build -t myapp:${{ github.sha }} .
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy to production
-        run: |
-          echo "Deploying to production..."
-          # Add deployment steps here`}
-          description="Example of a CI/CD pipeline using GitHub Actions"
+          code={'name: CI/CD Pipeline\n\non:\n  push:\n    branches: [ main, develop ]\n  pull_request:\n    branches: [ main, develop ]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - uses: actions/setup-node@v2\n        with:\n          node-version: \'16\'\n      \n      - name: Install dependencies\n        run: npm ci\n      \n      - name: Run tests\n        run: npm test\n      \n      - name: Run linting\n        run: npm run lint\n\n  build:\n    needs: test\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - uses: actions/setup-node@v2\n        with:\n          node-version: \'16\'\n      \n      - name: Build application\n        run: npm run build\n      \n      - name: Build Docker image\n        run: docker build -t myapp:${{ github.sha }} .\n\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - name: Deploy to production\n        run: echo "Deploying to production..."\n      - name: Notify team\n        run: echo "Deployment complete!"'}
+          description="Example of GitHub Actions workflow"
         />
       </ContentSection>
 
       <ContentSection title="Containerization">
-        <h3 className="text-lg font-medium text-white mb-2">Docker</h3>
+        <h3 className="text-lg font-medium text-white mb-2">Docker Basics</h3>
         <p>
-          Containerize applications using Docker.
+          Example of a Dockerfile configuration.
         </p>
         <CodeExample
           title="Dockerfile Example"
-          code={`# Use Node.js LTS version
-FROM node:16-alpine
-
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build application
-RUN npm run build
-
-# Expose port
-EXPOSE 3000
-
-# Start application
-CMD ["npm", "start"]`}
-          description="Example of a Dockerfile for a Node.js application"
+          code={'# Use Node.js LTS version\nFROM node:18-alpine\n\n# Set working directory\nWORKDIR /app\n\n# Copy package files\nCOPY package*.json ./\n\n# Install dependencies\nRUN npm ci\n\n# Copy source code\nCOPY . .\n\n# Build application\nRUN npm run build\n\n# Expose port\nEXPOSE 3000\n\n# Start application\nCMD ["npm", "start"]'}
+          description="Example of Dockerfile configuration"
         />
 
         <h3 className="text-lg font-medium text-white mt-4 mb-2">Docker Compose</h3>
@@ -183,71 +94,26 @@ volumes:
       </ContentSection>
 
       <ContentSection title="Infrastructure as Code">
-        <h3 className="text-lg font-medium text-white mb-2">Terraform</h3>
+        <h3 className="text-lg font-medium text-white mb-2">Terraform Example</h3>
         <p>
-          Define infrastructure using Terraform.
+          Example of infrastructure configuration using Terraform.
         </p>
         <CodeExample
           title="Terraform Configuration"
-          code={`# Configure AWS provider
-provider "aws" {
-  region = "us-west-2"
-}
-
-# Create VPC
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-  
-  tags = {
-    Name = "main"
-  }
-}
-
-# Create subnet
-resource "aws_subnet" "main" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-  
-  tags = {
-    Name = "main"
-  }
-}
-
-# Create EC2 instance
-resource "aws_instance" "app" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.main.id
-  
-  tags = {
-    Name = "app"
-  }
-}`}
+          code={'# Configure AWS provider\nprovider "aws" {\n  region = "us-east-1"\n}\n\n# Create VPC\nresource "aws_vpc" "main" {\n  cidr_block = "10.0.0.0/16"\n  \n  tags = {\n    Name = "main-vpc"\n  }\n}\n\n# Create subnet\nresource "aws_subnet" "main" {\n  vpc_id     = aws_vpc.main.id\n  cidr_block = "10.0.1.0/24"\n  \n  tags = {\n    Name = "main-subnet"\n  }\n}\n\n# Create EC2 instance\nresource "aws_instance" "app" {\n  ami           = "ami-0c7217cdde317cfec"\n  instance_type = "t2.micro"\n  subnet_id     = aws_subnet.main.id\n  \n  tags = {\n    Name = "app-server"\n  }\n}'}
           description="Example of Terraform configuration"
         />
       </ContentSection>
 
       <ContentSection title="Monitoring and Logging">
-        <h3 className="text-lg font-medium text-white mb-2">Prometheus and Grafana</h3>
+        <h3 className="text-lg font-medium text-white mb-2">Application Monitoring</h3>
         <p>
-          Set up monitoring and visualization.
+          Example of application monitoring setup.
         </p>
         <CodeExample
-          title="Prometheus Configuration"
-          code={`global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
-
-scrape_configs:
-  - job_name: 'nodejs-app'
-    static_configs:
-      - targets: ['localhost:3000']
-    metrics_path: '/metrics'
-
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['localhost:9100']`}
-          description="Example of Prometheus configuration"
+          title="Monitoring Configuration"
+          code={'// Example of monitoring setup\nconst monitoring = {\n  metrics: {\n    enabled: true,\n    interval: 60000, // 1 minute\n    endpoints: [\n      "/metrics",\n      "/health"\n    ]\n  },\n  logging: {\n    level: "info",\n    format: "json",\n    transports: [\n      "console",\n      "file"\n    ]\n  },\n  alerts: {\n    enabled: true,\n    channels: [\n      "email",\n      "slack"\n    ],\n    thresholds: {\n      cpu: 80,\n      memory: 85,\n      disk: 90\n    }\n  }\n};'}
+          description="Example of monitoring configuration"
         />
 
         <h3 className="text-lg font-medium text-white mt-4 mb-2">ELK Stack</h3>
@@ -278,18 +144,18 @@ output {
         />
       </ContentSection>
 
-      <ContentSection title="DevOps Best Practices">
+      <ContentSection title="Best Practices">
         <ul className="list-disc list-inside space-y-2">
           <li>Automate everything possible</li>
-          <li>Use infrastructure as code</li>
-          <li>Implement continuous integration</li>
-          <li>Practice continuous deployment</li>
+          <li>Use version control for all code and configurations</li>
+          <li>Implement continuous integration and deployment</li>
           <li>Monitor and log everything</li>
-          <li>Use version control for all code</li>
+          <li>Use infrastructure as code</li>
+          <li>Implement security best practices</li>
+          <li>Regularly update dependencies</li>
+          <li>Document processes and procedures</li>
+          <li>Use containerization for consistency</li>
           <li>Implement automated testing</li>
-          <li>Use containerization</li>
-          <li>Practice configuration management</li>
-          <li>Implement security measures</li>
         </ul>
       </ContentSection>
 

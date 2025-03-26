@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import ContentLayout from '@/components/content/ContentLayout';
 import ContentSection from '@/components/content/ContentSection';
 import CodeExample from '@/components/content/CodeExample';

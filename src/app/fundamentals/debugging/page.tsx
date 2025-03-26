@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import ContentLayout from '@/components/content/ContentLayout';
 import ContentSection from '@/components/content/ContentSection';
 import CodeExample from '@/components/content/CodeExample';
@@ -21,53 +24,14 @@ export default function DebuggingPage() {
         </p>
         <CodeExample
           title="Using Console Methods"
-          code={`// Console methods for debugging
-console.log('Basic logging');
-console.info('Informational message');
-console.warn('Warning message');
-console.error('Error message');
-
-// Grouping console messages
-console.group('User Authentication');
-console.log('Checking credentials...');
-console.log('Validating input...');
-console.groupEnd();
-
-// Timing operations
-console.time('Operation');
-// ... some code ...
-console.timeEnd('Operation');
-
-// Table display
-console.table([
-  { id: 1, name: 'John', age: 30 },
-  { id: 2, name: 'Jane', age: 25 }
-]);`}
+          code={'// Console methods for debugging\nconsole.log(\'Basic logging\');\nconsole.info(\'Informational message\');\nconsole.warn(\'Warning message\');\nconsole.error(\'Error message\');\n\n// Grouping console messages\nconsole.group(\'User Authentication\');\nconsole.log(\'Checking credentials...\');\nconsole.log(\'Validating input...\');\nconsole.groupEnd();\n\n// Timing operations\nconsole.time(\'Operation\');\n// ... some code ...\nconsole.timeEnd(\'Operation\');\n\n// Table display\nconsole.table([\n  { id: 1, name: \'John\', age: 30 },\n  { id: 2, name: \'Jane\', age: 25 }\n]);'}
           description="Examples of console methods for debugging"
         />
 
         <h3 className="text-lg font-medium text-white mt-4 mb-2">Debugger Statement</h3>
         <CodeExample
           title="Using Debugger"
-          code={`function calculateTotal(items) {
-  let total = 0;
-  
-  debugger; // Code execution will pause here
-  
-  for (const item of items) {
-    total += item.price;
-  }
-  
-  return total;
-}
-
-// Example usage
-const items = [
-  { name: 'Item 1', price: 10 },
-  { name: 'Item 2', price: 20 }
-];
-
-calculateTotal(items);`}
+          code={'function calculateTotal(items) {\n  let total = 0;\n  \n  debugger; // Code execution will pause here\n  \n  for (const item of items) {\n    total += item.price;\n  }\n  \n  return total;\n}\n\n// Example usage\nconst items = [\n  { name: \'Item 1\', price: 10 },\n  { name: \'Item 2\', price: 20 }\n];\n\ncalculateTotal(items);'}
           description="Example of using the debugger statement"
         />
       </ContentSection>
@@ -76,81 +40,14 @@ calculateTotal(items);`}
         <h3 className="text-lg font-medium text-white mb-2">Logging and Tracing</h3>
         <CodeExample
           title="Logging Implementation"
-          code={`class Logger {
-  static log(level, message, data = null) {
-    const timestamp = new Date().toISOString();
-    const logMessage = {
-      timestamp,
-      level,
-      message,
-      data
-    };
-    
-    // Log to console
-    console.log(JSON.stringify(logMessage, null, 2));
-    
-    // Could also log to file or send to logging service
-  }
-  
-  static info(message, data) {
-    this.log('INFO', message, data);
-  }
-  
-  static error(message, error) {
-    this.log('ERROR', message, {
-      error: error.message,
-      stack: error.stack
-    });
-  }
-}
-
-// Usage example
-try {
-  Logger.info('Processing user data', { userId: 123 });
-  // ... some code ...
-} catch (error) {
-  Logger.error('Failed to process user data', error);
-}`}
+          code={'class Logger {\n  static log(level, message, data = null) {\n    const timestamp = new Date().toISOString();\n    const logMessage = {\n      timestamp,\n      level,\n      message,\n      data\n    };\n    \n    // Log to console\n    console.log(JSON.stringify(logMessage, null, 2));\n    \n    // Could also log to file or send to logging service\n  }\n  \n  static info(message, data) {\n    this.log(\'INFO\', message, data);\n  }\n  \n  static error(message, error) {\n    this.log(\'ERROR\', message, {\n      error: error.message,\n      stack: error.stack\n    });\n  }\n}\n\n// Usage example\ntry {\n  Logger.info(\'Processing user data\', { userId: 123 });\n  // ... some code ...\n} catch (error) {\n  Logger.error(\'Failed to process user data\', error);\n}'}
           description="Example of a logging implementation"
         />
 
         <h3 className="text-lg font-medium text-white mt-4 mb-2">Error Handling</h3>
         <CodeExample
           title="Error Handling Example"
-          code={`async function fetchUserData(userId) {
-  try {
-    const response = await fetch(`/api/users/${userId}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    // Log the error
-    console.error('Error fetching user data:', error);
-    
-    // Handle specific error types
-    if (error instanceof TypeError) {
-      console.error('Network error occurred');
-    } else if (error instanceof SyntaxError) {
-      console.error('Invalid JSON response');
-    }
-    
-    // Rethrow or return error state
-    throw error;
-  }
-}
-
-// Usage with error handling
-async function displayUser(userId) {
-  try {
-    const user = await fetchUserData(userId);
-    // Display user data
-  } catch (error) {
-    // Show error message to user
-    showErrorMessage('Failed to load user data');
-  }
-}`}
+          code={'async function fetchUserData(userId) {\n  try {\n    const response = await fetch(\'/api/users/\' + userId);\n    if (!response.ok) {\n      throw new Error(\'HTTP error! status: \' + response.status);\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    // Log the error\n    console.error(\'Error fetching user data:\', error);\n    \n    // Handle specific error types\n    if (error instanceof TypeError) {\n      console.error(\'Network error occurred\');\n    } else if (error instanceof SyntaxError) {\n      console.error(\'Invalid JSON response\');\n    }\n    \n    // Rethrow or return error state\n    throw error;\n  }\n}\n\n// Usage with error handling\nasync function displayUser(userId) {\n  try {\n    const user = await fetchUserData(userId);\n    // Display user data\n  } catch (error) {\n    // Show error message to user\n    showErrorMessage(\'Failed to load user data\');\n  }\n}'}
           description="Example of comprehensive error handling"
         />
       </ContentSection>
@@ -174,56 +71,14 @@ async function displayUser(userId) {
         <h3 className="text-lg font-medium text-white mb-2">Network Issues</h3>
         <CodeExample
           title="Network Debugging"
-          code={`async function debugNetworkRequest(url) {
-  try {
-    console.time('Request');
-    const response = await fetch(url);
-    console.timeEnd('Request');
-    
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers));
-    
-    const data = await response.json();
-    console.log('Response data:', data);
-    
-    return data;
-  } catch (error) {
-    console.error('Network error:', error);
-    throw error;
-  }
-}
-
-// Usage
-debugNetworkRequest('https://api.example.com/data');`}
+          code={'async function debugNetworkRequest(url) {\n  try {\n    console.time(\'Request\');\n    const response = await fetch(url);\n    console.timeEnd(\'Request\');\n    \n    console.log(\'Response status:\', response.status);\n    console.log(\'Response headers:\', Object.fromEntries(response.headers));\n    \n    const data = await response.json();\n    console.log(\'Response data:\', data);\n    \n    return data;\n  } catch (error) {\n    console.error(\'Network error:\', error);\n    throw error;\n  }\n}\n\n// Usage\ndebugNetworkRequest(\'https://api.example.com/data\');'}
           description="Example of network request debugging"
         />
 
         <h3 className="text-lg font-medium text-white mt-4 mb-2">Performance Issues</h3>
         <CodeExample
           title="Performance Debugging"
-          code={`function debugPerformance() {
-  // Start performance measurement
-  performance.mark('start');
-  
-  // Your code here
-  for (let i = 0; i < 1000000; i++) {
-    // Some expensive operation
-  }
-  
-  // End performance measurement
-  performance.mark('end');
-  
-  // Measure the duration
-  performance.measure('Operation Duration', 'start', 'end');
-  
-  // Get the measurements
-  const measurements = performance.getEntriesByName('Operation Duration');
-  console.log('Duration:', measurements[0].duration);
-  
-  // Clear measurements
-  performance.clearMarks();
-  performance.clearMeasures();
-}`}
+          code={'function debugPerformance() {\n  // Start performance measurement\n  performance.mark(\'start\');\n  \n  // Your code here\n  for (let i = 0; i < 1000000; i++) {\n    // Some expensive operation\n  }\n  \n  // End performance measurement\n  performance.mark(\'end\');\n  \n  // Measure the duration\n  performance.measure(\'Operation Duration\', \'start\', \'end\');\n  \n  // Get the measurements\n  const measurements = performance.getEntriesByName(\'Operation Duration\');\n  console.log(\'Duration:\', measurements[0].duration);\n  \n  // Clear measurements\n  performance.clearMarks();\n  performance.clearMeasures();\n}'}
           description="Example of performance debugging"
         />
       </ContentSection>
